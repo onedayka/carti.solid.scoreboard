@@ -1,0 +1,87 @@
+node_modules
+dist
+
+# Системные файлы macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Иконки папок Mac
+Icon?
+
+# Файлы, относящиеся к работе с MacOS
+__MACOSX
+
+# Thumbnails
+._*
+
+# Кэш кода и интерпретатора .NET
+*.vs/
+.vscode/
+
+# Файлы проекта Visual Studio
+*.csproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Файлы сборки
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Dd]ebug*/
+[Rr]elease*/
+[Tt]est[Rr]esult*/
+[Tt]est[Rr]esults*/
+[Oo]utput*/
+[Pp]ublish*/
+
+# Файлы пакетов
+*.nupkg
+*.snupkg
+*.nuspec
+.packages/
+
+# Файлы конфигурации
+appsettings*.json
+*.Secrets/
+
+# Временные файлы и кэш
+.tmp
+*.tmp
+*.temp
+*~
+*cache
+
+# Логи
+*.log
+*.tlog
+*.log*
+
+# Файлы среды разработки
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Rider Project files
+.idea
+/.idea/
+*.sln.iml
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Поддержка различных типов проектов
+*.localhistory/
+*.resharper*/
+project.lock.json
+project.fragment.lock.json
+
+# Сборочные артефакты
+*.build.log
+build/
+dist/

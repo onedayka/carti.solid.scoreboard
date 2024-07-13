@@ -1,0 +1,88 @@
+.table
+    display: grid
+    color: #fff
+    grid-template-rows: 8vh 1fr
+    padding: 18vh 0 0 0
+
+    .table-header
+        padding: 0 5%
+        position: fixed
+        top: 10vh
+        left: 0
+        z-index: 1
+
+        .column
+            &.best
+                color: #FFF
+                font-weight: 800
+    
+    .table-header, .table-body .row
+        display: grid
+        gap: 1vw
+    
+        .column
+            display: flex
+            align-items: center
+
+            &.position
+                justify-content: flex-start
+
+            &.best, &.last, &.lap
+                justify-content: center
+
+            &.interval
+                justify-content: flex-end
+
+    .table-header
+        height: 8vh
+        background: #3c3f4e
+        font-size: 3vh
+        color: #8d8da0
+        text-transform: uppercase
+
+    .table-body
+        .row
+            align-items: center
+            padding: 0 5%
+            height: calc( 82vh / 6 )
+            font-size: calc( (82vh / 6) - 9vh )
+
+            &:nth-child(2n)
+                background: #232328
+
+            .driver
+                display: flex
+                position: relative
+                overflow: hidden
+
+                .number
+                    background: linear-gradient(90deg, hsla(33, 100%, 53%, 1) 0%, hsla(58, 100%, 68%, 1) 100%)
+                    height: 6vh
+                    width: 8vh
+                    border-radius: 1vh
+                    color: #000
+                    text-align: center
+                    line-height: 6vh
+                    overflow: hidden
+                    margin: 0 2vh 0 0
+
+                .name
+                    overflow: hidden
+                    width: 100%
+                    white-space: nowrap
+                    text-overflow: ellipsis
+
+            .last
+                &.green
+                    color: #00f51a
+
+                &.yellow
+                    color: #ffd800
+
+                &.purple
+                    color: #f700ff
+
+
+            .best
+                &.purple
+                    color: #f700ff
