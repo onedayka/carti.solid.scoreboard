@@ -64,7 +64,35 @@ function getLapTime(laps: Lap[]): string | null{
     return '';
 }
 
+const [updatedStatus, setUpdatedStatus] = createSignal({});
+
 const ResultTable: Component = (props) => {
+
+    let childDiv;
+
+    const addClass = (payload: any) => {
+
+        setUpdatedStatus(data => {
+            let updatedData = { ...data }
+
+            updatedData[payload] = true;
+
+            return updatedData;
+        });
+
+        setTimeout(() => {
+            setUpdatedStatus(data => {
+                let updatedData = { ...data }
+
+                delete updatedData[payload];
+
+                return updatedData;
+            });
+        }, 300)
+
+    };
+
+    props.setUpdateRowRef(addClass);
 
     const [columns, setColumns] = createSignal({
         col1: { visible: true, size: '6vw', label: "#", class: 'position' },
@@ -114,9 +142,9 @@ const ResultTable: Component = (props) => {
             <div class="table-body">
                 <For each={Object.entries(props.raceData)}>
                     {([number, driver], index) => (
-                        <div class="row" style={{ 'grid-template-columns': getTableSizes() }}>
+                        <div class={`row ${updatedStatus()[driver.cartId] ? 'updated' : ''}`} style={{ 'grid-template-columns': getTableSizes() }}>
                             <div class="column position">{index() + 1}</div><div class="column driver">
-                                <div class="number">{driver.id}</div>
+                                <div class="number">{driver.cartId}</div>
                                 <div class="name">{driver.name}</div>
                             </div>
                             <div class="column lap">{Object.keys(driver.laps).length > 0 ? Object.keys(driver.laps).length : ''}</div>

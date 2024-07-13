@@ -1,3 +1,17 @@
+@keyframes fadeBackground
+  from
+    background-color: rgba(135, 135, 135, 0.5) // полупрозрачный черный
+
+  to
+    background-color: #00000000 // черный
+
+@keyframes fadeBackground2n
+  from
+    background-color: rgba(135, 135, 135, 0.5) // полупрозрачный черный
+
+  to
+    background-color: #232328 // черный
+
 .table
     display: grid
     color: #fff
@@ -49,6 +63,13 @@
 
             &:nth-child(2n)
                 background: #232328
+
+            &.updated
+                animation: fadeBackground .3s ease-in-out
+
+                &:nth-child(2n)
+                    animation: fadeBackground2n .3s ease-in-out
+
 
             .driver
                 display: flex

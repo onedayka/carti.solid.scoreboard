@@ -1,4 +1,5 @@
 node_modules
+dist
 
 # Системные файлы macOS
 .DS_Store
@@ -83,3 +84,4 @@ project.fragment.lock.json
 # Сборочные артефакты
 *.build.log
 build/
+dist/

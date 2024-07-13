@@ -1,5 +1,4 @@
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
-import { createMemo } from "solid-js"
 import './styles.sass'
 
 import { WebSocketClient } from "./websocket";
@@ -7,6 +6,7 @@ import { WebSocketClient } from "./websocket";
 import ScoreboardHeader from './scoreboard/ScoreboardHeader';
 import ResultTable from './scoreboard/ResultTable';
 import Stub from './stub/Stub';
+import Stub2 from './stub/StubVideo';
 
 //Состояния гонки
 const [webSocketStatus, setWebsocketStatus] = createSignal(false); //Состояние подключения
@@ -46,10 +46,6 @@ const updateFinalScore = () => {
   setFinalScore(sortedData); 
 };
 
-// Функция для разбора сообщения
-const parseMessage = (message) => {
-  return message.split(',').map(part => part.replace(/"/g, ''));
-};
 
 function onTiming(message: any) {
   setRaceTiming(payload => {
@@ -113,12 +109,12 @@ function onEndLap(message: any) {
 
     let updatedData: any = { ...data }
 
-    updatedData[message.data.id].laps[message.data.lapNumber] = {number: message.data.lapNumber, time: message.data.time };
-    updatedData[message.data.id].improved = message.data.isImproved;
+    updatedData[message.data.transponderId].laps[message.data.lapNumber] = {number: message.data.lapNumber, time: message.data.time };
+    updatedData[message.data.transponderId].improved = message.data.isImproved;
 
-    if (updatedData[message.data.id].improved || updatedData[message.data.id].bestLap < 1) {
-      updatedData[message.data.id].bestTime = message.data.time;
-      updatedData[message.data.id].bestLap = message.data.lapNumber;
+    if (updatedData[message.data.transponderId].improved || updatedData[message.data.transponderId].bestLap < 1) {
+      updatedData[message.data.transponderId].bestTime = message.data.time;
+      updatedData[message.data.transponderId].bestLap = message.data.lapNumber;
     }
 
     if ((bestOverallTime() == null ? Infinity : bestOverallTime()) > message.data.time) {
@@ -129,6 +125,7 @@ function onEndLap(message: any) {
 
   });
 
+  updateRowAnimation(message.data.id);
   updateFinalScore();
 }
 
@@ -137,8 +134,8 @@ function onAddDriver(message: any) {
 
     let updatedData = { ...data };
 
-    updatedData[message.data.id] = {
-      "id": message.data.id,
+    updatedData[message.data.transponderId] = {
+      "cartId": message.data.id,
       "name": message.data.name != "" ? message.data.name : "Карт #" + message.data.id,
       "laps": {},
       "bestLap": null,
@@ -152,9 +149,27 @@ function onAddDriver(message: any) {
   updateFinalScore();
 }
 
+function onModifyDriver(message: any) {
+  setRaceData(data => {
+
+    let updatedData = { ...data };
+
+    updatedData[message.data.transponderId].name = message.data.name;
+
+    return updatedData;
+  });
+
+  updateFinalScore();
+}
+
+let updateRowAnimation;
+
 const App: Component = () => {
 
-  let ws = new WebSocketClient("ws://192.168.1.71:5000", true);
+  let ws = new WebSocketClient("ws://127.0.0.1:8100", true);
+
+  
+  const updateRowRef = (ref: any) => { updateRowAnimation = ref; };
 
   onMount(() => {
     ws.start();
@@ -165,6 +180,7 @@ const App: Component = () => {
     ws.addEventListener("message.clear", onClear)
     ws.addEventListener("message.endLap", onEndLap)
     ws.addEventListener("message.addDriver", onAddDriver)
+    ws.addEventListener("message.modifyDriver", onModifyDriver)
     ws.addEventListener("message.finish", onFinish)
     ws.addEventListener("message.start", onStart)
 
@@ -180,10 +196,10 @@ const App: Component = () => {
   return (
     <div class="scoreboard">
       <Show when={stubEnabled()}>
-        <Stub status={webSocketStatus()} />
+        <Stub2 status={webSocketStatus()} />
       </Show>
       <ScoreboardHeader timing={raceTiming()} />
-      <ResultTable raceData={finalScore()} bestLap={bestOverallTime()} />
+      <ResultTable raceData={finalScore()} bestLap={bestOverallTime()} setUpdateRowRef={updateRowRef} />
     </div>
   );
 };
