@@ -81,6 +81,7 @@ function onConnected() {
 
 function onClose() {
   setStubStatus(true);
+  setWebsocketStatus(false);
 }
 
 function onClear() {
